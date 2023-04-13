@@ -1,19 +1,16 @@
-import TodoList from "@/components/TodoList"
-import Link from "next/link"
 import Head from 'next/head'
 
-export default function Todos({ Component, pageProps }) {
+export default function TodoFull({ id, text }) {
     return <>
         <Head>
-            <title>To-Do</title>
-            <meta name="description" content="To-Do List" />
+            <title>To-Do Item {id}</title>
+            <meta name="description" content="Full To-Do Item" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/check_mark.ico" />
         </Head>
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="relative place-items-center">
-                <TodoList></TodoList>
-                <Link href="done"><button className="btn btn-primary">Completed Items</button></Link>
+                {text}
             </div>
         </main>
     </>

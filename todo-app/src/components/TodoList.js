@@ -10,9 +10,11 @@ export default function TodoList() {
     // setLoading(true);
 
     function add() {
-        var todoItem = { text: newTodo };
-        setTodoItems(todoItems.concat(todoItem));
-        setNewTodo("");
+        if(newTodo) {
+            var todoItem = { text: newTodo };
+            setTodoItems(todoItems.concat(todoItem));
+            setNewTodo("");
+        }
     }
 
 
@@ -34,7 +36,7 @@ export default function TodoList() {
 
         return (
             <>
-                <ol>
+                <ol className="place-items-center items-center self-center">
                     {todoListItems}
                     <input
                         placeholder="add a new todo list item"
@@ -42,7 +44,7 @@ export default function TodoList() {
                         onChange={(e) => setNewTodo(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { add() } }}
                     ></input>
-                    <button onClick={add}>add</button>
+                    <button onClick={add} className="btn btn-secondary">add</button>
                 </ol>
             </>
         );
