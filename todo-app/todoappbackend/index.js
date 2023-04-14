@@ -84,7 +84,7 @@ app.get("/test", (req, res) => {
 });
 
 // Use Crudlify to create a REST API for any collection
-crudlify(app, {users: UserYup, todos: TodoYup, categories: CategoryYup})
+crudlify(app, {todos: TodoYup, categories: CategoryYup})
 
 // bind to serverless runtime
 export default app.init();

@@ -1,6 +1,7 @@
 import DoneList from "@/components/DoneList"
 import Link from "next/link"
 import Head from 'next/head'
+import Navbar from "@/components/Navbar"
 
 export default function Done({ Component, pageProps }) {
     return <>
@@ -10,6 +11,7 @@ export default function Done({ Component, pageProps }) {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="icon" href="/check_mark.ico" />
         </Head>
+        <Navbar />
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="relative place-items-center">
                 <DoneList></DoneList>

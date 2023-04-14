@@ -1,24 +1,46 @@
 import React, { useState, useEffect } from "react";
+import { useAuth, UserButton, SignIn } from '@clerk/nextjs';
+import { addTodo, getTodoList } from "@/modules/data";
 
 export default function TodoList() {
     const [loading, setLoading] = useState(false);
     const [todoItems, setTodoItems] = useState([]);
-
     const [newTodo, setNewTodo] = useState("");
+
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
 
 
     // setLoading(true);
 
-    function add() {
-        if(newTodo) {
-            var todoItem = { text: newTodo };
+    // useEffect(() => {
+    //     async function getTodoList() {
+    //         if(userId) {
+    //             // setTodoItems(await getTodoList(getToken({ template: "codehooks" })));
+    //             console.log(await getTodoList(getToken({ template: "codehooks" })))
+    //         }
+    //     }
+    //     getTodoList();
+    // }, [isLoaded])
+
+    async function add() {
+        if(newTodo && userId) {
+            var todoItem = {
+                id: 1,
+                text: newTodo,
+                category: "",
+                userId: userId,
+            };
+            const res = await getTodoList(getToken({ template: "codehooks" }));
+            console.log(res);
             setTodoItems(todoItems.concat(todoItem));
+            console.log(getToken({ template: "codehooks" }));
+            addTodo(getToken({ template: "codehooks" }),newTodo);
             setNewTodo("");
         }
     }
 
 
-    if(loading) {
+    if(!isLoaded) {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const todoListItems = todoItems.map((todoItem) => (
