@@ -2,9 +2,11 @@ import DoneList from "@/components/DoneList"
 import Link from "next/link"
 import Head from 'next/head'
 import Navbar from "@/components/Navbar"
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs"
 
 export default function Done({ Component, pageProps }) {
     return <>
+    <SignedIn>
         <Head>
             <title>Done</title>
             <meta name="description" content="Done List" />
@@ -18,5 +20,9 @@ export default function Done({ Component, pageProps }) {
                 <Link href="todos"><button className="btn btn-primary">Todo List</button></Link>
             </div>
         </main>
+    </SignedIn>
+    <SignedOut>
+        <RedirectToSignIn />
+    </SignedOut>
     </>
 }

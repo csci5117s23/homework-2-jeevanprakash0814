@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import TodoFull from "@/components/TodoFull";
 import Navbar from "@/components/Navbar";
+import { SignedIn } from "@clerk/nextjs";
 
 export default function DoneCategoryPage() {
     const router = useRouter();
@@ -8,8 +9,13 @@ export default function DoneCategoryPage() {
     const text = "just testing";
     if (text) {
         return <>
-            <Navbar />
-            <TodoFull id={category} text={text}></TodoFull>
+            <SignedIn>
+                <Navbar />
+                <TodoFull id={category} text={text}></TodoFull>
+            </SignedIn>
+            <SignedOut>
+                <RedirectToSignIn />
+            </SignedOut>
         </>
     } else {
         return <></>

@@ -8,8 +8,13 @@ export default function todoPage() {
     const text = "just testing";
     if (text) {
         return <>
-            <Navbar />
-            <TodoFull id={id} text={text}></TodoFull>
+            <SignedIn>
+                <Navbar />
+                <TodoFull id={category} text={text}></TodoFull>
+            </SignedIn>
+            <SignedOut>
+                <RedirectToSignIn />
+            </SignedOut>
         </>
     } else {
         return <></>
