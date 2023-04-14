@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import TodoFull from "@/components/TodoFull";
 import Navbar from "@/components/Navbar";
-import { SignedIn } from "@clerk/nextjs";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 
 export default function DoneCategoryPage() {
     const router = useRouter();

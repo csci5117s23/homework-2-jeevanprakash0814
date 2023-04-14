@@ -11,7 +11,28 @@ export async function getTodoList(authToken) {
 }
 
 export async function addTodo(authToken, todo) {
-    const result = await fetch(backend_base + "/todos", {
+    // console.log(JSON.stringify(todo));
+    const result = await fetch(`${backend_base}/todos`, {
+        'method': 'POST',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+            'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify(todo)
+    })
+    return result;
+}
+
+export async function deleteTodo(authToken, todo) {
+    const result = await fetch(backend_base+"/todo/"+todo.id,{
+        'method':'DELETE',
+        'headers': {'Authorization': 'Bearer ' + authToken},
+    })
+    return await result.json();
+}
+
+export async function addDone(authToken, todo) {
+    const result = await fetch(backend_base + "/done", {
         'method': 'POST',
         'headers': {
             'Authorization': 'Bearer ' + authToken,
@@ -21,17 +42,9 @@ export async function addTodo(authToken, todo) {
             id: todo.id,
             text: todo.text,
             category: todo.category,
-            userId: "",
-            completed: false
+            userId: authToken.sub,
+            completed: true
         })
-    })
-    return await result.json();
-}
-
-export async function deleteTodo(authToken, todo) {
-    const result = await fetch(backend_base+"/todo/"+todo.id,{
-        'method':'DELETE',
-        'headers': {'Authorization': 'Bearer ' + authToken},
     })
     return await result.json();
 }

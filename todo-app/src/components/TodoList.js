@@ -12,29 +12,33 @@ export default function TodoList() {
 
     // setLoading(true);
 
-    // useEffect(() => {
-    //     async function getTodoList() {
-    //         if(userId) {
-    //             // setTodoItems(await getTodoList(getToken({ template: "codehooks" })));
-    //             console.log(await getTodoList(getToken({ template: "codehooks" })))
-    //         }
-    //     }
-    //     getTodoList();
-    // }, [isLoaded])
+    useEffect(() => {
+        async function process() {
+            if(userId) {
+                const token = await getToken({ template: "codehooks" })
+                const res = await getTodoList(token);
+                return res;
+            }
+        }
+        process().then((res) => {
+            setTodoItems(res);
+        });
+    }, [isLoaded])
 
     async function add() {
         if(newTodo && userId) {
             var todoItem = {
-                id: 1,
                 text: newTodo,
                 category: "",
                 userId: userId,
+                completed: false
             };
-            const res = await getTodoList(getToken({ template: "codehooks" }));
-            console.log(res);
-            setTodoItems(todoItems.concat(todoItem));
-            console.log(getToken({ template: "codehooks" }));
-            addTodo(getToken({ template: "codehooks" }),newTodo);
+            const token = await getToken({ template: "codehooks" })
+            await addTodo(token,todoItem);
+            const res = await getTodoList(token);
+            // console.log("res" + JSON.stringify(res));
+            setTodoItems(res);
+            // console.log(token);
             setNewTodo("");
         }
     }
@@ -44,7 +48,7 @@ export default function TodoList() {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const todoListItems = todoItems.map((todoItem) => (
-            <li key={todoItem.text}>
+            <li>
                 {todoItem.text}
                 <span
                     onClick={() => {
@@ -58,7 +62,7 @@ export default function TodoList() {
 
         return (
             <>
-                <ol className="place-items-center items-center self-center">
+                <ul className="place-items-center items-center self-center">
                     {todoListItems}
                     <input
                         placeholder="add a new todo list item"
@@ -67,7 +71,7 @@ export default function TodoList() {
                         onKeyDown={(e) => { if (e.key === 'Enter') { add() } }}
                     ></input>
                     <button onClick={add} className="btn btn-secondary">add</button>
-                </ol>
+                </ul>
             </>
         );
     }
