@@ -2,8 +2,8 @@
 
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
-export async function getTodoList(authToken) {
-    const result = await fetch(backend_base+"/todos",{
+export async function getTodoList(authToken, userId) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&completed=false`,{
         'method':'GET',
         'headers': {'Authorization': 'Bearer ' + authToken}
     })

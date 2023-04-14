@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth, UserButton, SignIn } from '@clerk/nextjs';
-import { addTodo, getTodoList } from "@/modules/data";
+import { addTodo, getTodoList, deleteTodo } from "@/modules/data";
 
 export default function TodoList() {
     const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export default function TodoList() {
         async function process() {
             if(userId) {
                 const token = await getToken({ template: "codehooks" })
-                const res = await getTodoList(token);
+                const res = await getTodoList(token,userId);
                 return res;
             }
         }
@@ -35,7 +35,7 @@ export default function TodoList() {
             };
             const token = await getToken({ template: "codehooks" })
             await addTodo(token,todoItem);
-            const res = await getTodoList(token);
+            const res = await getTodoList(token,userId);
             // console.log("res" + JSON.stringify(res));
             setTodoItems(res);
             // console.log(token);
@@ -48,14 +48,14 @@ export default function TodoList() {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const todoListItems = todoItems.map((todoItem) => (
-            <li>
+            <li key={todoItem._id}>
                 {todoItem.text}
                 <span
                     onClick={() => {
                         console.log("delete todo item!");
                     }}
                 >
-                    (x)
+                    (x:{todoItem._id})
                 </span>
             </li>
         ));
