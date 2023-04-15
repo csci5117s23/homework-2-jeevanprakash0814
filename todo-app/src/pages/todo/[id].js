@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import { useAuth } from "@clerk/nextjs";
 import Head from 'next/head'
 
-export default function todoPage() {
+export default function TodoPage() {
     const { isLoaded, isSignedIn } = useAuth();
     const router = useRouter();
 
@@ -15,7 +15,7 @@ export default function todoPage() {
     else {
         return <>
             <Head>
-                <title>To-Do Item {id}</title>
+                <title>To-Do Item: {id}</title>
                 <meta name="description" content="Full To-Do Item" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/check_mark.ico" />

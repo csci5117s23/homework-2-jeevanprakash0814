@@ -18,6 +18,30 @@ export async function getDoneList(authToken, userId) {
     return await result.json();
 }
 
+export async function getAllTodoList(authToken, userId) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+export async function getCategoryTodoList(authToken, userId, category) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&completed=false&category=${category}`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+export async function getCategoryDoneList(authToken, userId, category) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&completed=true&category=${category}`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
 export async function getTodo(authToken, userId, todoId) {
     const result = await fetch(`${backend_base}/todos?userId=${userId}&_id=${todoId}`,{
         'method':'GET',

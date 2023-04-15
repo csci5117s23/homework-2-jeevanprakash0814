@@ -5,7 +5,7 @@ import { getDoneList } from "@/modules/data";
 export default function DoneList() {
     const [doneItems, setDoneItems] = useState([]);
 
-    const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const { isLoaded, userId, getToken } = useAuth();
 
     useEffect(() => {
         async function process() {

@@ -7,7 +7,7 @@ export default function TodoList() {
     const [newTodo, setNewTodo] = useState("");
     const [addingTodo, setAddingTodo] = useState(false);
 
-    const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const { isLoaded, userId, getToken } = useAuth();
 
     useEffect(() => {
         async function process() {
@@ -33,7 +33,6 @@ export default function TodoList() {
             };
             const token = await getToken({ template: "codehooks" })
             await addTodo(token,todoItem);
-            const res = await getTodoList(token,userId);
             // console.log("res" + JSON.stringify(res));
             // setTodoItems(res);
             // console.log(token);
@@ -49,16 +48,17 @@ export default function TodoList() {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>
                 {todoItem.text}
-                <span
+                <button
                     onClick={async () => {
                         console.log("delete todo item!");
                         const token = await getToken({ template: "codehooks" });
                         await setToDone(token,userId,todoItem._id);
                         setAddingTodo(true);
                     }}
+                    className="btn btn-info ml-5"
                 >
-                    (x:{todoItem._id})
-                </span>
+                    Mark as Done
+                </button>
             </li>
         ));
 
@@ -71,6 +71,7 @@ export default function TodoList() {
                         value={newTodo}
                         onChange={(e) => setNewTodo(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { add() } }}
+                        autoFocus
                     ></input>
                     <button onClick={add} className="btn btn-secondary">add</button>
                 </ul>
