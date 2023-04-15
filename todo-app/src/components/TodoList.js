@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { addTodo, getTodoList, setToDone } from "@/modules/data";
+import { addCategory, addTodo, getCategories, getTodoList, setToDone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -8,6 +8,9 @@ export default function TodoList() {
     const [todoItems, setTodoItems] = useState([]);
     const [newTodo, setNewTodo] = useState("");
     const [addingTodo, setAddingTodo] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [addingCategory, setAddingCategory] = useState(false);
+    const [newCategory, setNewCategory] = useState("");
 
     const { isLoaded, userId, getToken } = useAuth();
 
@@ -27,6 +30,21 @@ export default function TodoList() {
         });
     }, [isLoaded,addingTodo])
 
+    useEffect(() => {
+        async function process() {
+            if(userId) {
+                const token = await getToken({ template: "codehooks" })
+                const res = await getCategories(token,userId);
+                return res;
+            }
+        }
+        process().then((res) => {
+            setCategories(res);
+            console.log(res);
+            setAddingCategory(false);
+        })
+    }, [isLoaded,addingCategory])
+
     async function add() {
         if(newTodo && userId) {
             var todoItem = {
@@ -42,6 +60,23 @@ export default function TodoList() {
             // console.log(token);
             setNewTodo("");
             setAddingTodo(true);
+        }
+    }
+
+    async function addCategoryItem() {
+        if(newCategory && userId) {
+            console.log("I am here");
+            var categoryItem = {
+                name: newCategory,
+                userId: userId
+            };
+            const token = await getToken({ template: "codehooks" })
+            await addCategory(token,categoryItem);
+            // console.log("res" + JSON.stringify(res));
+            // setTodoItems(res);
+            // console.log(token);
+            setNewCategory("");
+            setAddingCategory(true);
         }
     }
 
@@ -74,6 +109,16 @@ export default function TodoList() {
             </li>
         ));
 
+        const categoryItems = categories.map((category) => {
+            <li key={category._id}>
+                <Link href={`/todos/${category.name}`}>
+                    <button className="btn btn-primary">
+                        {category.name}
+                    </button>
+                </Link>
+            </li>
+        })
+
         return (
             <>
                 <ul className="place-items-center items-center self-center">
@@ -87,6 +132,14 @@ export default function TodoList() {
                     ></input>
                     <button onClick={add} className="btn btn-secondary">add</button>
                 </ul>
+                {categoryItems}
+                <input
+                    placeholder="add a new category"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { addCategoryItem() } }}
+                ></input>
+                <button onClick={addCategoryItem} className="btn btn-secondary">add</button>
             </>
         );
     }

@@ -42,6 +42,27 @@ export async function getCategoryDoneList(authToken, userId, category) {
     return await result.json();
 }
 
+export async function getCategories(authToken, userId) {
+    const result = await fetch(`${backend_base}/categories?userId=${userId}`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+export async function addCategory(authToken, category) {
+    // console.log(JSON.stringify(todo));
+    const result = await fetch(`${backend_base}/categories`, {
+        'method': 'POST',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+            'Content-Type': 'application/json'
+        },
+        'body': JSON.stringify(category)
+    })
+    return result;
+}
+
 export async function getTodo(authToken, userId, todoId) {
     const result = await fetch(`${backend_base}/todos?userId=${userId}&_id=${todoId}`,{
         'method':'GET',
@@ -67,32 +88,6 @@ export async function deleteTodo(authToken, todo) {
     const result = await fetch(backend_base+"/todo/"+todo.id,{
         'method':'DELETE',
         'headers': {'Authorization': 'Bearer ' + authToken},
-    })
-    return await result.json();
-}
-
-export async function addDone(authToken, todo) {
-    const result = await fetch(backend_base + "/done", {
-        'method': 'POST',
-        'headers': {
-            'Authorization': 'Bearer ' + authToken,
-            'Content-Type': 'application/json'
-        },
-        'body': JSON.stringify({
-            id: todo.id,
-            text: todo.text,
-            category: todo.category,
-            userId: authToken.sub,
-            completed: true
-        })
-    })
-    return await result.json();
-}
-
-export async function getCategories (authToken) {
-    const result = await fetch(backend_base+"/pres",{
-        'method':'GET',
-        'headers': {'Authorization': 'Bearer ' + authToken}
     })
     return await result.json();
 }

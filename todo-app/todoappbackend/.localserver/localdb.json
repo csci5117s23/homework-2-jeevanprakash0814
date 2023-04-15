@@ -12,7 +12,7 @@
       },
       "18781926f66-a4t1vbv8iw7qx7": {
         "id": 1,
-        "text": "hello sir",
+        "text": "hello Kailash",
         "category": "",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
         "completed": false,
@@ -83,11 +83,28 @@
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
         "completed": false,
         "_id": "187835f6581-0chqiovzuy1kjh"
+      },
+      "18786c43098-dryky13tkt9kgb": {
+        "text": "new",
+        "category": "",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": false,
+        "_id": "18786c43098-dryky13tkt9kgb"
       }
     }
   ],
   [
     "_dbmetadata",
     {}
+  ],
+  [
+    "categories",
+    {
+      "18786c5a8d6-0sgl70t9ry2lhf": {
+        "name": "category a",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "_id": "18786c5a8d6-0sgl70t9ry2lhf"
+      }
+    }
   ]
 ]
