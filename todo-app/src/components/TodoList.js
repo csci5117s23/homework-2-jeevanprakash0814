@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
 import { addTodo, getTodoList, setToDone } from "@/modules/data";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function TodoList() {
     const [todoItems, setTodoItems] = useState([]);
@@ -8,6 +10,8 @@ export default function TodoList() {
     const [addingTodo, setAddingTodo] = useState(false);
 
     const { isLoaded, userId, getToken } = useAuth();
+
+    const router = useRouter();
 
     useEffect(() => {
         async function process() {
@@ -48,6 +52,14 @@ export default function TodoList() {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>
                 {todoItem.text}
+                <Link href={`/todo/${todoItem._id}`}>
+                    <button
+                        // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                        className="btn btn-success ml-5"
+                    >
+                        Open
+                    </button>
+                </Link>
                 <button
                     onClick={async () => {
                         console.log("delete todo item!");

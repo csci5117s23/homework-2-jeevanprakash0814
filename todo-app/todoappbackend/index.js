@@ -16,7 +16,7 @@ const TodoYup = object({
 
 const CategoryYup = object({
   userId: string().required(),
-  categories: array().of(string()).required()
+  categories: string().required()
 })
 
 // This can largely be copy-pasted, it just grabs the authorization token and parses it, stashing it on the request. from Professor Kluver's example repo

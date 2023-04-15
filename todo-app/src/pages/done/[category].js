@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
 import { getCategoryDoneList } from "@/modules/data";
 import { useRouter } from "next/router";
+import Head from 'next/head'
+import Navbar from "@/components/Navbar";
+import Link from "next/link";
 
 export default function DoneCategoryPage() {
     const [doneItems, setDoneItems] = useState([]);
 
-    const { isLoaded, userId, getToken } = useAuth();
+    const { isLoaded, userId, isSignedIn, getToken } = useAuth();
     const router = useRouter();
 
     const {category} = router.query;
@@ -26,6 +29,7 @@ export default function DoneCategoryPage() {
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
+    else if (!todoItems) router.push("/todos");
     else {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>
@@ -47,6 +51,14 @@ export default function DoneCategoryPage() {
                         <ul className="place-items-center items-center self-center">
                             {doneListItems}
                         </ul>
+                        <Link href={`/todos`}>
+                            <button
+                                // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                                className="btn btn-primary"
+                            >
+                                Back to your To-Do List
+                            </button>
+                        </Link>
                     </div>
                 </main>
             </>

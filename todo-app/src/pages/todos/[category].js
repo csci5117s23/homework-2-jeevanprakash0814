@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { addTodo, getCategoryDoneList, getTodoList, setToDone } from "@/modules/data";
+import { addTodo, getCategoryDoneList, setToDone } from "@/modules/data";
+import { useRouter } from "next/router";
+import Head from 'next/head'
+import Navbar from "@/components/Navbar";
+import Link from "next/link";
 
 export default function TodoList() {
     const [todoItems, setTodoItems] = useState([]);
     const [newTodo, setNewTodo] = useState("");
     const [addingTodo, setAddingTodo] = useState(false);
 
-    const { isLoaded, userId, getToken } = useAuth();
+    const { isLoaded, userId, isSignedIn, getToken } = useAuth();
     const router = useRouter();
 
     const {category} = router.query;
@@ -44,6 +48,7 @@ export default function TodoList() {
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
+    else if (!todoItems) router.push("/todos");
     else {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>
@@ -84,6 +89,14 @@ export default function TodoList() {
                             ></input>
                             <button onClick={add} className="btn btn-secondary">add</button>
                         </ul>
+                        <Link href={`/todos`}>
+                            <button
+                                // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                                className="btn btn-primary"
+                            >
+                                Back to your To-Do List
+                            </button>
+                        </Link>
                     </div>
                 </main>
             </>
