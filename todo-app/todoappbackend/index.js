@@ -77,7 +77,7 @@ app.use('/todo/:id', async (req, res, next) => {
   next();
 })
 
-app.put('/setToDone', async (req, res) => {
+app.put('/updateTodo', async (req, res) => {
   const db = await Datastore.open();
   const data = await db.updateOne('todos',req.query._id, req.body);
   res.json(data);

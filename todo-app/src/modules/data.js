@@ -76,7 +76,21 @@ export async function getCategories (authToken) {
 export async function setToDone(authToken, userId, todoId) {
     let todoItem = (await getTodo(authToken, userId, todoId))[0];
     todoItem.completed = true;
-    const result = fetch(`${backend_base}/setToDone?userId=${userId}&_id=${todoId}`, {
+    const result = fetch(`${backend_base}/updateTodo?userId=${userId}&_id=${todoId}`, {
+        'method': 'PUT',
+        'headers': {
+          'Authorization': 'Bearer ' + authToken,
+          'Content-Type': 'application/json',
+        },
+        'body': JSON.stringify(todoItem)
+      });
+      return result;
+}
+
+export async function editTodo(authToken, userId, todoId, text) {
+    let todoItem = (await getTodo(authToken, userId, todoId))[0];
+    todoItem.text = text;
+    const result = fetch(`${backend_base}/updateTodo?userId=${userId}&_id=${todoId}`, {
         'method': 'PUT',
         'headers': {
           'Authorization': 'Bearer ' + authToken,
