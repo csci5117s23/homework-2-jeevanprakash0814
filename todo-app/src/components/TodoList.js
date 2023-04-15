@@ -35,9 +35,10 @@ export default function TodoList() {
             await addTodo(token,todoItem);
             const res = await getTodoList(token,userId);
             // console.log("res" + JSON.stringify(res));
-            setTodoItems(res);
+            // setTodoItems(res);
             // console.log(token);
             setNewTodo("");
+            setAddingTodo(true);
         }
     }
 
