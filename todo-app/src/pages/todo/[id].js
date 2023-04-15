@@ -5,16 +5,16 @@ import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
 
 export default function todoPage() {
     const router = useRouter();
-    const {category} = router.query;
+    const {id} = router.query;
     const text = "just testing";
     if (text) {
         return <>
             <SignedIn>
                 <Navbar />
-                <TodoFull id={category} text={text}></TodoFull>
+                <TodoFull id={id}></TodoFull>
             </SignedIn>
             <SignedOut>
-                <RedirectToSignIn />
+                <RedirectToSignIn /> {/* change to redirect to / page */}
             </SignedOut>
         </>
     } else {

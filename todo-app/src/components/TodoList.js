@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useAuth, UserButton, SignIn } from '@clerk/nextjs';
-import { addTodo, getTodoList, deleteTodo } from "@/modules/data";
+import { useAuth } from '@clerk/nextjs';
+import { addTodo, getTodoList, setToDone } from "@/modules/data";
 
 export default function TodoList() {
-    const [loading, setLoading] = useState(false);
     const [todoItems, setTodoItems] = useState([]);
     const [newTodo, setNewTodo] = useState("");
+    const [addingTodo, setAddingTodo] = useState(false);
 
     const { isLoaded, userId, sessionId, getToken } = useAuth();
-
-
-    // setLoading(true);
 
     useEffect(() => {
         async function process() {
@@ -22,8 +19,9 @@ export default function TodoList() {
         }
         process().then((res) => {
             setTodoItems(res);
+            setAddingTodo(false);
         });
-    }, [isLoaded])
+    }, [isLoaded,addingTodo])
 
     async function add() {
         if(newTodo && userId) {
@@ -51,8 +49,11 @@ export default function TodoList() {
             <li key={todoItem._id}>
                 {todoItem.text}
                 <span
-                    onClick={() => {
+                    onClick={async () => {
                         console.log("delete todo item!");
+                        const token = await getToken({ template: "codehooks" });
+                        await setToDone(token,userId,todoItem._id);
+                        setAddingTodo(true);
                     }}
                 >
                     (x:{todoItem._id})

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function TodoFull({ id, text }) {
+export default function TodoFull({ id }) {
     return <>
         <Head>
             <title>To-Do Item {id}</title>

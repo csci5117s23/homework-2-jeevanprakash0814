@@ -10,6 +10,22 @@ export async function getTodoList(authToken, userId) {
     return await result.json();
 }
 
+export async function getDoneList(authToken, userId) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&completed=true`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+export async function getTodo(authToken, userId, todoId) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&_id=${todoId}`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
 export async function addTodo(authToken, todo) {
     // console.log(JSON.stringify(todo));
     const result = await fetch(`${backend_base}/todos`, {
@@ -55,4 +71,18 @@ export async function getCategories (authToken) {
         'headers': {'Authorization': 'Bearer ' + authToken}
     })
     return await result.json();
+}
+
+export async function setToDone(authToken, userId, todoId) {
+    let todoItem = (await getTodo(authToken, userId, todoId))[0];
+    todoItem.completed = true;
+    const result = fetch(`${backend_base}/setToDone?userId=${userId}&_id=${todoId}`, {
+        'method': 'PUT',
+        'headers': {
+          'Authorization': 'Bearer ' + authToken,
+          'Content-Type': 'application/json',
+        },
+        'body': JSON.stringify(todoItem)
+      });
+      return result;
 }

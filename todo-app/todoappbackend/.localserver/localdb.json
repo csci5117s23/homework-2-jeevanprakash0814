@@ -53,7 +53,7 @@
         "text": "addd",
         "category": "",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
-        "completed": false,
+        "completed": true,
         "_id": "18781a30d8f-3q4xezuoi07467"
       },
       "18781a73b10-a2e7s49z2oekfy": {
@@ -67,8 +67,15 @@
         "text": "hello",
         "category": "",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
-        "completed": false,
+        "completed": true,
         "_id": "18781b9fc6f-taaz51h5cj0z2v"
+      },
+      "18782dddc62-xbbf7x3pl16ais": {
+        "text": "rent",
+        "category": "",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": true,
+        "_id": "18782dddc62-xbbf7x3pl16ais"
       }
     }
   ],
