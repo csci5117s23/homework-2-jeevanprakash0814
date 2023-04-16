@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 
 const TodoYup = object({
   text: string().required(),
-  category: string().optional(), // need to do a check at the frontend for whether the category exists anymore, if it does exist delete it?
+  category: string().required(), // need to do a check at the frontend for whether the category exists anymore, if it does exist delete it?
   userId: string().required(),
   completed: boolean().required()
 })
@@ -28,7 +28,7 @@ const userAuth = async (req, res, next) => {
       // NOTE this doesn't validate, but we don't need it to. codehooks is doing that for us.
       const token_parsed = jwtDecode(token);
       req.user_token = token_parsed;
-    }
+    } // might need an else here if auth not given
     next();
   } catch (error) {
     next(error);

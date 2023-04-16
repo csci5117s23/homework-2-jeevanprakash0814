@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { getCategoryDoneList } from "@/modules/data";
+import { getCategoryDoneList, setToUndone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Head from 'next/head'
 import Navbar from "@/components/Navbar";
@@ -8,6 +8,7 @@ import Link from "next/link";
 
 export default function DoneCategoryPage() {
     const [doneItems, setDoneItems] = useState([]);
+    const [removingDone, setRemovingDone] = useState(false);
 
     const { isLoaded, userId, isSignedIn, getToken } = useAuth();
     const router = useRouter();
@@ -25,15 +26,25 @@ export default function DoneCategoryPage() {
         process().then((res) => {
             setDoneItems(res);
         });
-    }, [isLoaded])
+    }, [isLoaded,removingDone])
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
-    else if (!doneItems) router.push("/todos");
+    else if (!doneItems) router.push("/404");
     else {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>
                 {doneItem.text}
+                <button
+                    onClick={async () => {
+                        const token = await getToken({ template: "codehooks" });
+                        await setToUndone(token,userId,doneItem._id);
+                        setRemovingDone(true);
+                    }}
+                    className="btn btn-info ml-5"
+                >
+                    Mark as Uncomplete
+                </button>
             </li>
         ));
 
@@ -48,7 +59,7 @@ export default function DoneCategoryPage() {
                 <Navbar />
                 <main className="flex min-h-screen flex-col items-center justify-between p-24">
                     <div className="relative place-items-center">
-                    <h2>{category} Todo List</h2>
+                    <h2>{category} Done List</h2>
                         <ul className="place-items-center items-center self-center">
                             {doneListItems}
                         </ul>

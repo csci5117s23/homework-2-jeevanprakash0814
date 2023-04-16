@@ -25,6 +25,7 @@ export default function TodoList() {
             }
         }
         process().then((res) => {
+            console.log(res);
             setTodoItems(res);
             setAddingTodo(false);
         });
@@ -48,7 +49,7 @@ export default function TodoList() {
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
-    else if (!todoItems) router.push("/todos");
+    else if (!todoItems) router.push("/404");
     else {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>

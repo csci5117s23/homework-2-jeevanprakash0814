@@ -42,6 +42,14 @@ export async function getCategoryDoneList(authToken, userId, category) {
     return await result.json();
 }
 
+export async function getCategoryAllList(authToken, userId, category) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&category=${category}`,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
 export async function getCategories(authToken, userId) {
     const result = await fetch(`${backend_base}/categories?userId=${userId}`,{
         'method':'GET',
@@ -116,9 +124,37 @@ export async function setToDone(authToken, userId, todoId) {
       return result;
 }
 
-export async function editTodo(authToken, userId, todoId, text) {
+export async function setToUndone(authToken, userId, todoId) {
+    let todoItem = (await getTodo(authToken, userId, todoId))[0];
+    todoItem.completed = false;
+    const result = fetch(`${backend_base}/updateTodo?userId=${userId}&_id=${todoId}`, {
+        'method': 'PUT',
+        'headers': {
+          'Authorization': 'Bearer ' + authToken,
+          'Content-Type': 'application/json',
+        },
+        'body': JSON.stringify(todoItem)
+      });
+      return result;
+}
+
+export async function editTodoText(authToken, userId, todoId, text) {
     let todoItem = (await getTodo(authToken, userId, todoId))[0];
     todoItem.text = text;
+    const result = fetch(`${backend_base}/updateTodo?userId=${userId}&_id=${todoId}`, {
+        'method': 'PUT',
+        'headers': {
+          'Authorization': 'Bearer ' + authToken,
+          'Content-Type': 'application/json',
+        },
+        'body': JSON.stringify(todoItem)
+      });
+      return result;
+}
+
+export async function editTodoCategory(authToken, userId, todoId, category) {
+    let todoItem = (await getTodo(authToken, userId, todoId))[0];
+    todoItem.category = category;
     const result = fetch(`${backend_base}/updateTodo?userId=${userId}&_id=${todoId}`, {
         'method': 'PUT',
         'headers': {

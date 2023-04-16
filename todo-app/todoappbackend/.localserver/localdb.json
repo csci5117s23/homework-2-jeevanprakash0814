@@ -93,24 +93,52 @@
       },
       "18788dd9a72-rt29bixcfdt4pw": {
         "text": "new category a todo",
-        "category": "category a",
+        "category": "",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
-        "completed": true,
+        "completed": false,
         "_id": "18788dd9a72-rt29bixcfdt4pw"
       },
       "18788e24919-e1sfqnelxaw4qk": {
         "text": "bob",
-        "category": "category a",
+        "category": "category d",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
-        "completed": true,
+        "completed": false,
         "_id": "18788e24919-e1sfqnelxaw4qk"
       },
       "1878b307120-tuu9zly4zyome8": {
         "text": "Shreya likes Spongebob",
-        "category": "category a",
+        "category": "",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
         "completed": false,
         "_id": "1878b307120-tuu9zly4zyome8"
+      },
+      "1878bec3328-pa4279xcy269mq": {
+        "text": "new category a item",
+        "category": "",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": false,
+        "_id": "1878bec3328-pa4279xcy269mq"
+      },
+      "1878c064d69-08mqz3nnu08p1v": {
+        "text": "category a item 2",
+        "category": "",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": false,
+        "_id": "1878c064d69-08mqz3nnu08p1v"
+      },
+      "1878c0caad8-5uflcgn6h27ufu": {
+        "text": "new item",
+        "category": "",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": false,
+        "_id": "1878c0caad8-5uflcgn6h27ufu"
+      },
+      "1878c396d61-x34wtke5lpalf5": {
+        "text": "spongebob",
+        "category": "category d",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": false,
+        "_id": "1878c396d61-x34wtke5lpalf5"
       }
     }
   ],

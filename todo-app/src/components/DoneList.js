@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { getDoneList } from "@/modules/data";
+import { getDoneList, setToUndone } from "@/modules/data";
 
 export default function DoneList() {
     const [doneItems, setDoneItems] = useState([]);
+    const [removingDone, setRemovingDone] = useState(false);
 
     const { isLoaded, userId, getToken } = useAuth();
 
@@ -18,7 +19,7 @@ export default function DoneList() {
         process().then((res) => {
             setDoneItems(res);
         });
-    }, [isLoaded])
+    }, [isLoaded,removingDone])
 
 
     if(!isLoaded) {
@@ -27,6 +28,16 @@ export default function DoneList() {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>
                 {doneItem.text}
+                <button
+                    onClick={async () => {
+                        const token = await getToken({ template: "codehooks" });
+                        await setToUndone(token,userId,doneItem._id);
+                        setRemovingDone(true);
+                    }}
+                    className="btn btn-info ml-5"
+                >
+                    Mark as Uncomplete
+                </button>
             </li>
         ));
 

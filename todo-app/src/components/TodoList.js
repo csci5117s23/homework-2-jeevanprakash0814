@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { addCategory, addTodo, deleteCategory, getCategories, getTodoList, setToDone } from "@/modules/data";
+import { addCategory, addTodo, deleteCategory, editTodoCategory, getCategories, getCategoryAllList, getCategoryTodoList, getTodoList, setToDone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -65,7 +65,7 @@ export default function TodoList() {
         }
     }
 
-    async function addCategoryItem() {
+    async function addCategoryItem() { // TODO: need to handle adding duplicate category item
         if(newCategory && userId) {
             // console.log("I am here");
             var categoryItem = {
@@ -80,6 +80,20 @@ export default function TodoList() {
             setNewCategory("");
             setAddingCategory(true);
         }
+    }
+
+    async function deleteCategoryOption(category) {
+        const token = await getToken({ template: "codehooks" });
+        deleteCategory(token,userId,category._id).then(() => {
+            setAddingCategory(true);
+        }).catch((error) => {
+            console.log(error);
+        })
+        getCategoryAllList(token,userId,category.name).then((res) => {
+            res.forEach(async (todoItem) => {
+                await editTodoCategory(token,userId,todoItem._id,"");
+            });
+        })
     }
 
 
@@ -120,12 +134,7 @@ export default function TodoList() {
                 </Link>
                 <button
                     onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        deleteCategory(token,userId,category._id).then(() => {
-                            setAddingCategory(true);
-                        }).catch((error) => {
-                            console.log(error);
-                        })
+                        await deleteCategoryOption(category);
                     }}
                     className="btn btn-danger ml-5"
                 >
