@@ -48,6 +48,7 @@ export default function DoneCategoryPage() {
                 <Navbar />
                 <main className="flex min-h-screen flex-col items-center justify-between p-24">
                     <div className="relative place-items-center">
+                    <h2>{category} Todo List</h2>
                         <ul className="place-items-center items-center self-center">
                             {doneListItems}
                         </ul>

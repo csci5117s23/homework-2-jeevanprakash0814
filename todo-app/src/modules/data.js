@@ -51,7 +51,6 @@ export async function getCategories(authToken, userId) {
 }
 
 export async function addCategory(authToken, category) {
-    // console.log(JSON.stringify(todo));
     const result = await fetch(`${backend_base}/categories`, {
         'method': 'POST',
         'headers': {
@@ -61,6 +60,17 @@ export async function addCategory(authToken, category) {
         'body': JSON.stringify(category)
     })
     return result;
+}
+
+export async function deleteCategory(authToken, userId, categoryId) {
+    const result = await fetch(`${backend_base}/deleteCategory?userId=${userId}&_id=${categoryId}`,{
+        'method':'DELETE',
+        'headers': {
+            'Authorization': 'Bearer ' + authToken,
+            'Content-Type': 'application/json'
+        }
+    })
+    return await result.json();
 }
 
 export async function getTodo(authToken, userId, todoId) {
@@ -84,8 +94,8 @@ export async function addTodo(authToken, todo) {
     return result;
 }
 
-export async function deleteTodo(authToken, todo) {
-    const result = await fetch(backend_base+"/todo/"+todo.id,{
+export async function deleteTodo(authToken, userId, todoId) {
+    const result = await fetch(`${backend_base}/todos?userId=${userId}&_id=${todoId}`,{
         'method':'DELETE',
         'headers': {'Authorization': 'Bearer ' + authToken},
     })

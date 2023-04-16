@@ -85,7 +85,7 @@
         "_id": "187835f6581-0chqiovzuy1kjh"
       },
       "18786c43098-dryky13tkt9kgb": {
-        "text": "new",
+        "text": "newish",
         "category": "",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
         "completed": false,
@@ -104,6 +104,13 @@
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
         "completed": true,
         "_id": "18788e24919-e1sfqnelxaw4qk"
+      },
+      "1878b307120-tuu9zly4zyome8": {
+        "text": "Shreya likes Spongebob",
+        "category": "category a",
+        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
+        "completed": false,
+        "_id": "1878b307120-tuu9zly4zyome8"
       }
     }
   ],
@@ -133,11 +140,6 @@
         "name": "category d",
         "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
         "_id": "18788b7fcba-b1kgxwk95oam31"
-      },
-      "18788dac95a-nzn5i28nv8lsoz": {
-        "name": "category e",
-        "userId": "user_2OOZemcOGstiNZEadTQ2F7822uW",
-        "_id": "18788dac95a-nzn5i28nv8lsoz"
       }
     }
   ]

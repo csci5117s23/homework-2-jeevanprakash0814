@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { addCategory, addTodo, getCategories, getTodoList, setToDone } from "@/modules/data";
+import { addCategory, addTodo, deleteCategory, getCategories, getTodoList, setToDone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -24,6 +24,13 @@ export default function TodoList() {
                 return res;
             }
         }
+        process().then((res) => {
+            setTodoItems(res);
+            setAddingTodo(false);
+        });
+    }, [isLoaded,addingTodo])
+
+    useEffect(() => {
         async function processCategories() {
             if(userId) {
                 const token = await getToken({ template: "codehooks" })
@@ -31,36 +38,14 @@ export default function TodoList() {
                 return res;
             }
         }
-        process().then((res) => {
-            setTodoItems(res);
-            setAddingTodo(false);
-        });
         processCategories().then((res) => {
             setCategories(res);
             // console.log(res);
-            // console.log("I am here 2: ");
+            // console.log("I am here 3: ");
             // console.log(categories);
             setAddingCategory(false);
-        });
-    }, [isLoaded,addingTodo, addingCategory])
-
-    // there were issues with having two separate useEffect functions with similar dependencies, which was why I consolidated them into one
-    // useEffect(() => {
-    //     async function processCategories() {
-    //         if(userId) {
-    //             const token = await getToken({ template: "codehooks" })
-    //             const res = await getCategories(token,userId);
-    //             return res;
-    //         }
-    //     }
-    //     processCategories().then((res) => {
-    //         setCategories(res);
-    //         // console.log(res);
-    //         // console.log("I am here 3: ");
-    //         // console.log(categories);
-    //         setAddingCategory(false);
-    //     })
-    // }, [isLoaded,addingCategory])
+        })
+    }, [isLoaded,addingCategory])
 
     async function add() {
         if(newTodo && userId) {
@@ -129,10 +114,23 @@ export default function TodoList() {
             <li key={category._id}>
                 {category.name}
                 <Link href={`/todos/${category.name}`}>
-                    <button className="btn btn-primary">
+                    <button className="btn btn-success">
                         Open
                     </button>
                 </Link>
+                <button
+                    onClick={async () => {
+                        const token = await getToken({ template: "codehooks" });
+                        deleteCategory(token,userId,category._id).then(() => {
+                            setAddingCategory(true);
+                        }).catch((error) => {
+                            console.log(error);
+                        })
+                    }}
+                    className="btn btn-danger ml-5"
+                >
+                    Delete
+                </button>
             </li>
         ));
 
