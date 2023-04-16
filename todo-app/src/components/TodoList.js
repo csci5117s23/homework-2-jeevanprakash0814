@@ -24,14 +24,7 @@ export default function TodoList() {
                 return res;
             }
         }
-        process().then((res) => {
-            setTodoItems(res);
-            setAddingTodo(false);
-        });
-    }, [isLoaded,addingTodo])
-
-    useEffect(() => {
-        async function process() {
+        async function processCategories() {
             if(userId) {
                 const token = await getToken({ template: "codehooks" })
                 const res = await getCategories(token,userId);
@@ -39,11 +32,35 @@ export default function TodoList() {
             }
         }
         process().then((res) => {
+            setTodoItems(res);
+            setAddingTodo(false);
+        });
+        processCategories().then((res) => {
             setCategories(res);
-            console.log(res);
+            // console.log(res);
+            // console.log("I am here 2: ");
+            // console.log(categories);
             setAddingCategory(false);
-        })
-    }, [isLoaded,addingCategory])
+        });
+    }, [isLoaded,addingTodo, addingCategory])
+
+    // there were issues with having two separate useEffect functions with similar dependencies, which was why I consolidated them into one
+    // useEffect(() => {
+    //     async function processCategories() {
+    //         if(userId) {
+    //             const token = await getToken({ template: "codehooks" })
+    //             const res = await getCategories(token,userId);
+    //             return res;
+    //         }
+    //     }
+    //     processCategories().then((res) => {
+    //         setCategories(res);
+    //         // console.log(res);
+    //         // console.log("I am here 3: ");
+    //         // console.log(categories);
+    //         setAddingCategory(false);
+    //     })
+    // }, [isLoaded,addingCategory])
 
     async function add() {
         if(newTodo && userId) {
@@ -65,7 +82,7 @@ export default function TodoList() {
 
     async function addCategoryItem() {
         if(newCategory && userId) {
-            console.log("I am here");
+            // console.log("I am here");
             var categoryItem = {
                 name: newCategory,
                 userId: userId
@@ -97,7 +114,6 @@ export default function TodoList() {
                 </Link>
                 <button
                     onClick={async () => {
-                        console.log("delete todo item!");
                         const token = await getToken({ template: "codehooks" });
                         await setToDone(token,userId,todoItem._id);
                         setAddingTodo(true);
@@ -109,15 +125,16 @@ export default function TodoList() {
             </li>
         ));
 
-        const categoryItems = categories.map((category) => {
+        const categoryItems = categories.map((category) => (
             <li key={category._id}>
+                {category.name}
                 <Link href={`/todos/${category.name}`}>
                     <button className="btn btn-primary">
-                        {category.name}
+                        Open
                     </button>
                 </Link>
             </li>
-        })
+        ));
 
         return (
             <>
@@ -132,14 +149,16 @@ export default function TodoList() {
                     ></input>
                     <button onClick={add} className="btn btn-secondary">add</button>
                 </ul>
-                {categoryItems}
-                <input
-                    placeholder="add a new category"
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') { addCategoryItem() } }}
-                ></input>
-                <button onClick={addCategoryItem} className="btn btn-secondary">add</button>
+                <ul className="place-items-center items-center self-center">
+                    {categoryItems}
+                    <input
+                        placeholder="add a new category"
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { addCategoryItem() } }}
+                    ></input>
+                    <button onClick={addCategoryItem} className="btn btn-secondary">add</button>
+                </ul>
             </>
         );
     }

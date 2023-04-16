@@ -29,7 +29,7 @@ export default function DoneCategoryPage() {
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
-    else if (!todoItems) router.push("/todos");
+    else if (!doneItems) router.push("/todos");
     else {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>

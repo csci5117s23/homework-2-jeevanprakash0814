@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { addTodo, getCategoryDoneList, setToDone } from "@/modules/data";
+import { addTodo, getCategoryTodoList, setToDone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Head from 'next/head'
 import Navbar from "@/components/Navbar";
@@ -20,7 +20,7 @@ export default function TodoList() {
         async function process() {
             if(userId) {
                 const token = await getToken({ template: "codehooks" })
-                const res = await getCategoryDoneList(token,userId,category);
+                const res = await getCategoryTodoList(token,userId,category);
                 return res;
             }
         }
@@ -55,7 +55,6 @@ export default function TodoList() {
                 {todoItem.text}
                 <button
                     onClick={async () => {
-                        console.log("delete todo item!");
                         const token = await getToken({ template: "codehooks" });
                         await setToDone(token,userId,todoItem._id);
                         setAddingTodo(true);
@@ -95,6 +94,14 @@ export default function TodoList() {
                                 className="btn btn-primary"
                             >
                                 Back to your To-Do List
+                            </button>
+                        </Link>
+                        <Link href={`/done/${category}`}>
+                            <button
+                                // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                                className="btn btn-primary"
+                            >
+                                Completed Items
                             </button>
                         </Link>
                     </div>
