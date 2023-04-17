@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { editTodoCategory, editTodoText, getCategories, getTodo } from "@/modules/data";
+import { addCategory, editTodoCategory, editTodoText, getCategories, getTodo } from "@/modules/data";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -12,6 +12,7 @@ export default function TodoFull({ id }) {
     const [editingCategory, setEditingCategory] = useState(false);
     const [categories, setCategories] = useState([]);
     const [submitCategory, setSubmitCategory] = useState(false);
+    const [newCategory, setNewCategory] = useState("");
     
     const router = useRouter();
     
@@ -103,10 +104,21 @@ export default function TodoFull({ id }) {
         }
     }
 
-    async function editCategory(categoryName) {
-        if(todoText && userId) {
+    async function editCategory(categoryName,addingNewCategory) {
+        if(categoryName && categoryName.length > 0 && userId) {
             const token = await getToken({ template: "codehooks" })
             await editTodoCategory(token,userId,id,categoryName);
+            console.log(`outside ${newCategory} ${addingNewCategory}`);
+            if(newCategory && newCategory.length > 0 && addingNewCategory) {
+                console.log("Inside");
+                const categoryItem = {
+                    userId: userId,
+                    name: newCategory
+                }
+                await addCategory(token,categoryItem);
+                setNewCategory("");
+                setCategories(await getCategories(token,userId));
+            }
             // const res = (await getTodo(token,userId,id))[0];
             // console.log("res" + JSON.stringify(res));
             // setTodoText(res.text);
@@ -122,6 +134,10 @@ export default function TodoFull({ id }) {
 
     function toggleEditCategory() {
         setEditingCategory(true);
+    }
+
+    function addingNewCategoryHelper() {
+        editCategory(newCategory,true);
     }
 
     if (!isLoaded) {
@@ -146,11 +162,21 @@ export default function TodoFull({ id }) {
                         value={todoText}
                         placeholder="Please fill in the desired to-do description"
                         onChange={(e) => setTodoText(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
                         autoFocus
                     ></input>
-                    <button className="btn btn-primary" onClick={editText}>Submit New Todo</button>
+                    <button className="btn btn-primary" onClick={editText}>Submit Edit</button>
                     <span>Choose a New Category: </span>
                     {categoryItems}
+                    <span>Or Enter a New Category: </span>
+                    <input
+                        value={newCategory}
+                        placeholder="Please fill in the desired category name"
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { addingNewCategoryHelper() } }}
+                        autoFocus
+                    ></input>
+                    <button className="btn btn-primary" onClick={addingNewCategoryHelper}>Submit</button>
                 </div>
             );
         } else if(editingTodo) {
@@ -161,6 +187,7 @@ export default function TodoFull({ id }) {
                         value={todoText}
                         placeholder="Please fill in the desired to-do description"
                         onChange={(e) => setTodoText(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
                         autoFocus
                     ></input>
                     <span className="badge rounded-pill bg-light text-dark">{todoCategory}</span>
@@ -172,16 +199,26 @@ export default function TodoFull({ id }) {
                 <div>
                     <h5 className="card-title">{todoText}</h5>
                     <button className="btn btn-primary" onClick={toggleEditText}>Edit Text</button>
-                    <span>Choose a New Category: </span>
+                    <span>Choose a Category: </span>
                     {categoryItems}
+                    <span>Or Enter a New Category: </span>
+                    <input
+                        value={newCategory}
+                        placeholder="Please fill in the desired category name"
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { addingNewCategoryHelper() } }}
+                        autoFocus
+                    ></input>
+                    <button className="btn btn-primary" onClick={addingNewCategoryHelper}>Submit</button>
                 </div>
+                
             );
         } else {
             console.log(todoCategory);
             cardFill = (
                 <div>
                     <h5 className="card-title">{todoText}</h5>
-                    <span className="badge rounded-pill bg-light text-dark">{todoCategory}</span>
+                    <span className="badge rounded-pill bg-dark text-light">{todoCategory}</span>
                     <button className="btn btn-primary" onClick={toggleEditText}>Edit Text</button>
                     <button className="btn btn-primary" onClick={toggleEditCategory}>Edit Category</button>
                 </div>

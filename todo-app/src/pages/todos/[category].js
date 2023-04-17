@@ -46,6 +46,13 @@ export default function TodoList() {
         }
     }
 
+    function shrinkText(text) {
+        // if(text.length > innerWidth/20) return `${text.substring(0,innerWidth/20)}...`;
+        // else return text;
+        if(text.length > 20) return `${text.substring(0,20)}...`;
+        else return text;
+    }
+
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
@@ -53,7 +60,7 @@ export default function TodoList() {
     else {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>
-                {todoItem.text}
+                {shrinkText(todoItem.text)}
                 <button
                     onClick={async () => {
                         const token = await getToken({ template: "codehooks" });
@@ -87,7 +94,7 @@ export default function TodoList() {
                                 onChange={(e) => setNewTodo(e.target.value)}
                                 onKeyDown={(e) => { if (e.key === 'Enter') { add() } }}
                                 autoFocus
-                            ></input>
+                            ></input>{/* Need to handle what happens if a huge piece of text is inputted */}
                             <button onClick={add} className="btn btn-secondary">add</button>
                         </ul>
                         <Link href={`/todos`}>
@@ -103,7 +110,7 @@ export default function TodoList() {
                                 // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
                                 className="btn btn-primary"
                             >
-                                Category ${category} Completed Items
+                                Category {category} Completed Items
                             </button>
                         </Link>
                     </div>

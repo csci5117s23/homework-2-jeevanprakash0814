@@ -22,13 +22,19 @@ export default function DoneList() {
         });
     }, [isLoaded,removingDone])
 
+    function shrinkText(text) {
+        // if(text.length > innerWidth/20) return `${text.substring(0,innerWidth/20)}...`;
+        // else return text;
+        if(text.length > 20) return `${text.substring(0,20)}...`;
+        else return text;
+    }
 
     if(!isLoaded) {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>
-                <s>{doneItem.text}</s>{` ${new Date(doneItem.createdOn)}`}
+                <s>{shrinkText(doneItem.text)}</s>{` ${new Date(doneItem.createdOn)}`}{/* Need to handle what happens if a huge piece of text is inputted */}
                 <Link href={`/todo/${doneItem._id}`}>
                     <button
                         // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}

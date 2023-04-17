@@ -102,13 +102,20 @@ export default function TodoList() {
         })
     }
 
+    function shrinkText(text) {
+        // if(text.length > screen.width/20) return `${text.substring(0,screen.width/20)}...`;
+        // else return text;
+        if(text.length > 20) return `${text.substring(0,20)}...`;
+        else return text;
+    }
+
 
     if(!isLoaded) {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>
-                {todoItem.text}{` ${new Date(todoItem.createdOn)}`}
+                {shrinkText(todoItem.text)}{` ${new Date(todoItem.createdOn)}`}
                 <Link href={`/todo/${todoItem._id}`}>
                     <button
                         // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
@@ -172,7 +179,7 @@ export default function TodoList() {
                         onChange={(e) => setNewTodo(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { add() } }}
                         autoFocus
-                    ></input>
+                    ></input> {/* Need to handle what happens if a huge piece of text is inputted */}
                     <button onClick={add} className="btn btn-secondary">add</button>
                 </ul>
                 <ul className="place-items-center items-center self-center">

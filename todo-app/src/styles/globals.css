@@ -16,9 +16,13 @@
   }
 }
 
-body {
+html,body {
   color: rgb(var(--background-end-rgb));
-  background: rgb(var(--background-end-rgb));
+  background: url('/pastel-dots.jpeg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
   /* background: linear-gradient(
       to bottom,
       transparent,

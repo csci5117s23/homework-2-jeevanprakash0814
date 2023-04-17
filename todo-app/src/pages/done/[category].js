@@ -28,13 +28,20 @@ export default function DoneCategoryPage() {
         });
     }, [isLoaded,removingDone])
 
+    function shrinkText(text) {
+        // if(text.length > innerWidth/20) return `${text.substring(0,innerWidth/20)}...`;
+        // else return text;
+        if(text.length > 20) return `${text.substring(0,20)}...`;
+        else return text;
+    }
+
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
     else if (!doneItems) router.push("/404");
     else {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>
-                {doneItem.text}
+                {shrinkText(doneItem.text)}
                 <button
                     onClick={async () => {
                         const token = await getToken({ template: "codehooks" });
@@ -61,7 +68,7 @@ export default function DoneCategoryPage() {
                     <div className="relative place-items-center">
                     <h2>{category} Done List</h2>
                         <ul className="place-items-center items-center self-center">
-                            {doneListItems}
+                            {doneListItems}{/* Need to handle what happens if a huge piece of text is inputted */}
                         </ul>
                         <Link href={`/todos`}>
                             <button
