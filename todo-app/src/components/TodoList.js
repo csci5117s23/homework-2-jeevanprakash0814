@@ -73,12 +73,18 @@ export default function TodoList() {
                 userId: userId
             };
             const token = await getToken({ template: "codehooks" })
-            await addCategory(token,categoryItem);
+            const categoryList = await getCategories(token,userId);
+            console.log(categoryList);
+            if(!categoryList.reduce((acc,curr) => acc || (curr.name===newCategory),false)) {
+                await addCategory(token,categoryItem);
+                setNewCategory("");
+                setAddingCategory(true);
+            } else {
+                alert("Please enter a unique category name");
+            }
             // console.log("res" + JSON.stringify(res));
             // setTodoItems(res);
             // console.log(token);
-            setNewCategory("");
-            setAddingCategory(true);
         }
     }
 
