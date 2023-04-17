@@ -33,40 +33,42 @@ export default function DoneList() {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const doneListItems = doneItems.map((doneItem) => (
-            <li key={doneItem._id}>
-                <s>{shrinkText(doneItem.text)}</s>{` ${new Date(doneItem.createdOn)}`}{/* Need to handle what happens if a huge piece of text is inputted */}
-                <Link href={`/todo/${doneItem._id}`}>
+            <div className="card relative place-items-center p-3 m-3 shadow-lg">
+                <h5 className="card-title"><s>{shrinkText(doneItem.text)}</s>{` ${new Date(doneItem.createdOn)}`}</h5>{/* Need to handle what happens if a huge piece of text is inputted */}
+                <div className="card-body">
+                    <Link href={`/todo/${doneItem._id}`}>
+                        <button
+                            // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                            className="btn btn-success ml-5"
+                        >
+                            Open
+                        </button>
+                    </Link>
                     <button
-                        // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
-                        className="btn btn-success ml-5"
-                    >
-                        Open
-                    </button>
-                </Link>
-                <button
-                    onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        await setToUndone(token,userId,doneItem._id);
-                        setRemovingDone(true);
-                    }}
-                    className="btn btn-info ml-5"
-                >
-                    Mark as Uncomplete
-                </button>
-                <button
-                    onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        await deleteTodo(token,userId,doneItem._id).then(() => {
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await setToUndone(token,userId,doneItem._id);
                             setRemovingDone(true);
-                        }).catch((error) => {
-                            console.log(error);
-                        });
-                    }}
-                    className="btn btn-danger ml-5"
-                >
-                    Delete
-                </button>
-            </li>
+                        }}
+                        className="btn btn-info ml-5"
+                    >
+                        Mark as Uncomplete
+                    </button>
+                    <button
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await deleteTodo(token,userId,doneItem._id).then(() => {
+                                setRemovingDone(true);
+                            }).catch((error) => {
+                                console.log(error);
+                            });
+                        }}
+                        className="btn btn-danger ml-5"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
         ));
 
         return (

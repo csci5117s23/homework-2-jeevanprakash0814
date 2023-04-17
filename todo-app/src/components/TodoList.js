@@ -114,59 +114,69 @@ export default function TodoList() {
         return <span> loading ... </span> // add nice loading animation here
     } else {
         const todoListItems = todoItems.map((todoItem) => (
-            <li key={todoItem._id}>
-                {shrinkText(todoItem.text)}{` ${new Date(todoItem.createdOn)}`}
-                <Link href={`/todo/${todoItem._id}`}>
+            <div className="card relative place-items-center p-3 m-3 shadow-lg">
+                <h5 className="card-title">{shrinkText(todoItem.text)}{` ${new Date(todoItem.createdOn)}`}</h5>
+                <div className="card-body">
+                    <Link href={`/todo/${todoItem._id}`}>
+                        <button
+                            // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                            className="btn btn-success ml-5"
+                        >
+                            Open
+                        </button>
+                    </Link>
                     <button
-                        // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
-                        className="btn btn-success ml-5"
-                    >
-                        Open
-                    </button>
-                </Link>
-                <button
-                    onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        await setToDone(token,userId,todoItem._id);
-                        setAddingTodo(true);
-                    }}
-                    className="btn btn-info ml-5"
-                >
-                    Mark as Done
-                </button>
-                <button
-                    onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        await deleteTodo(token,userId,todoItem._id).then(() => {
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await setToDone(token,userId,todoItem._id);
                             setAddingTodo(true);
-                        }).catch((error) => {
-                            console.log(error);
-                        });
-                    }}
-                    className="btn btn-danger ml-5"
-                >
-                    Delete
-                </button>
-            </li>
+                        }}
+                        className="btn btn-info ml-5"
+                    >
+                        Mark as Done
+                    </button>
+                    <button
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await deleteTodo(token,userId,todoItem._id).then(() => {
+                                setAddingTodo(true);
+                            }).catch((error) => {
+                                console.log(error);
+                            });
+                        }}
+                        className="btn btn-danger ml-5"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+            // <li key={todoItem._id}>
+            // </li>
         ));
 
         const categoryItems = categories.map((category) => (
-            <li key={category._id}>
-                {category.name}
-                <Link href={`/todos/${category.name}`}>
-                    <button className="btn btn-success">
-                        Open
-                    </button>
-                </Link>
-                <button
+            <div className="card relative place-items-center p-3 m-3 shadow-lg">
+                {/* <span class="badge rounded-pill bg-primary"><Link href={`/todos/${category.name}`}><span>{category.name}</span></Link> <span onClick={async () => {
+                    await deleteCategoryOption(category);
+                }}>x</span>
+                </span> */}
+                <div className="btn-group" role="group">
+                    <Link href={`/todos/${category.name}`}><button type="button" className="btn btn-primary m-1 rounded">{category.name}</button></Link>
+                    <button type="button" className="btn btn-danger m-1 rounded" onClick={async () => {
+                    await deleteCategoryOption(category);
+                }}>Delete</button>
+                </div>
+                {/* <button
                     onClick={async () => {
                         await deleteCategoryOption(category);
                     }}
-                    className="btn btn-danger ml-5"
+                    className="badge rounded btn-danger ml-5"
                 >
-                    Delete
-                </button>
-            </li>
+                    x
+                </button> */}
+            </div>
+            // <li key={category._id}>
+            // </li>
         ));
 
         return (
