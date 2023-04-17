@@ -163,7 +163,7 @@ export default function TodoFull({ id }) {
                         placeholder="Please fill in the desired to-do description"
                         onChange={(e) => setTodoText(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
-                        autoFocus
+                        className="border border-dark form-control"
                     ></input>
                     <button className="btn btn-primary" onClick={editText}>Submit Edit</button>
                     <span>Choose a New Category: </span>
@@ -174,7 +174,7 @@ export default function TodoFull({ id }) {
                         placeholder="Please fill in the desired category name"
                         onChange={(e) => setNewCategory(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { addingNewCategoryHelper() } }}
-                        autoFocus
+                        className="border border-dark form-control"
                     ></input>
                     <button className="btn btn-primary" onClick={addingNewCategoryHelper}>Submit</button>
                 </div>
@@ -188,7 +188,7 @@ export default function TodoFull({ id }) {
                         placeholder="Please fill in the desired to-do description"
                         onChange={(e) => setTodoText(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
-                        autoFocus
+                        className="border border-dark form-control"
                     ></input>
                     <span className="badge rounded-pill bg-light text-dark">{todoCategory}</span>
                     <button className="btn btn-primary" onClick={editText}>Submit</button>
@@ -207,7 +207,7 @@ export default function TodoFull({ id }) {
                         placeholder="Please fill in the desired category name"
                         onChange={(e) => setNewCategory(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { addingNewCategoryHelper() } }}
-                        autoFocus
+                        className="border border-dark form-control"
                     ></input>
                     <button className="btn btn-primary" onClick={addingNewCategoryHelper}>Submit</button>
                 </div>

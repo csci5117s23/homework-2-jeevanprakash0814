@@ -93,7 +93,7 @@ export default function TodoList() {
                                 value={newTodo}
                                 onChange={(e) => setNewTodo(e.target.value)}
                                 onKeyDown={(e) => { if (e.key === 'Enter') { add() } }}
-                                autoFocus
+                                className="border border-dark form-control"
                             ></input>{/* Need to handle what happens if a huge piece of text is inputted */}
                             <button onClick={add} className="btn btn-secondary">add</button>
                         </ul>
