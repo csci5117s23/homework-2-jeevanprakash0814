@@ -103,7 +103,7 @@ export async function addTodo(authToken, todo) {
 }
 
 export async function deleteTodo(authToken, userId, todoId) {
-    const result = await fetch(`${backend_base}/todos?userId=${userId}&_id=${todoId}`,{
+    const result = await fetch(`${backend_base}/deleteTodo?userId=${userId}&_id=${todoId}`,{
         'method':'DELETE',
         'headers': {'Authorization': 'Bearer ' + authToken},
     })

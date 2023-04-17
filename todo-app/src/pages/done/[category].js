@@ -68,7 +68,15 @@ export default function DoneCategoryPage() {
                                 // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
                                 className="btn btn-primary"
                             >
-                                Back to your To-Do List
+                                To-Do List
+                            </button>
+                        </Link>
+                        <Link href={`/todos/${category}`}>
+                            <button
+                                // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                                className="btn btn-primary"
+                            >
+                                Category {category} To-Do List
                             </button>
                         </Link>
                     </div>

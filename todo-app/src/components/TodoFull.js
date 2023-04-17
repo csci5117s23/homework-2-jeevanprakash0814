@@ -199,7 +199,15 @@ export default function TodoFull({ id }) {
                         // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
                         className="btn btn-primary"
                     >
-                        Back to your To-Do List
+                        To-Do List
+                    </button>
+                </Link>
+                <Link href={`/done`}>
+                    <button
+                        // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                        className="btn btn-primary"
+                    >
+                        Completed Items
                     </button>
                 </Link>
             </main>

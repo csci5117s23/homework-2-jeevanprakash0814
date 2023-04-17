@@ -103,7 +103,7 @@ export default function TodoList() {
                                 // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
                                 className="btn btn-primary"
                             >
-                                Completed Items
+                                Category ${category} Completed Items
                             </button>
                         </Link>
                     </div>

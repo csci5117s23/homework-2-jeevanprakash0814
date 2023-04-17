@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { addCategory, addTodo, deleteCategory, editTodoCategory, getCategories, getCategoryAllList, getCategoryTodoList, getTodoList, setToDone } from "@/modules/data";
+import { addCategory, addTodo, deleteCategory, deleteTodo, editTodoCategory, getCategories, getCategoryAllList, getCategoryTodoList, getTodoList, setToDone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -25,7 +25,7 @@ export default function TodoList() {
             }
         }
         process().then((res) => {
-            setTodoItems(res);
+            setTodoItems(res.sort((a,b) => new Date(b.createdOn)-new Date(a.createdOn)));
             setAddingTodo(false);
         });
     }, [isLoaded,addingTodo])
@@ -102,7 +102,7 @@ export default function TodoList() {
     } else {
         const todoListItems = todoItems.map((todoItem) => (
             <li key={todoItem._id}>
-                {todoItem.text}
+                {todoItem.text}{` ${new Date(todoItem.createdOn)}`}
                 <Link href={`/todo/${todoItem._id}`}>
                     <button
                         // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
@@ -120,6 +120,19 @@ export default function TodoList() {
                     className="btn btn-info ml-5"
                 >
                     Mark as Done
+                </button>
+                <button
+                    onClick={async () => {
+                        const token = await getToken({ template: "codehooks" });
+                        await deleteTodo(token,userId,todoItem._id).then(() => {
+                            setAddingTodo(true);
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    }}
+                    className="btn btn-danger ml-5"
+                >
+                    Delete
                 </button>
             </li>
         ));

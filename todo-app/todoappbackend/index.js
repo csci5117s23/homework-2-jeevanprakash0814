@@ -4,14 +4,15 @@
 */
 import {app, Datastore} from 'codehooks-js'
 import {crudlify} from 'codehooks-crudlify'
-import { object, string, number, boolean, array} from 'yup';
+import { object, string, boolean, date} from 'yup';
 import jwtDecode from 'jwt-decode';
 
 const TodoYup = object({
   text: string().required(),
-  category: string().required(), // need to do a check at the frontend for whether the category exists anymore, if it does exist delete it?
+  category: string().optional(), // need to do a check at the frontend for whether the category exists anymore, if it does exist delete it?
   userId: string().required(),
-  completed: boolean().required()
+  completed: boolean().required(),
+  createdOn: date().default(() => new Date())
 })
 
 const CategoryYup = object({
@@ -80,6 +81,12 @@ app.use(userAuth)
 app.put('/updateTodo', async (req, res) => {
   const db = await Datastore.open();
   const data = await db.updateOne('todos',req.query._id, req.body);
+  res.json(data);
+});
+
+app.delete('/deleteTodo', async (req, res) => {
+  const db = await Datastore.open();
+  const data = await db.removeOne('todos',req.query._id);
   res.json(data);
 });
 

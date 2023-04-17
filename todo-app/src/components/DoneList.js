@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
-import { getDoneList, setToUndone } from "@/modules/data";
+import { deleteTodo, getDoneList, setToUndone } from "@/modules/data";
+import Link from "next/link";
 
 export default function DoneList() {
     const [doneItems, setDoneItems] = useState([]);
@@ -17,7 +18,7 @@ export default function DoneList() {
             }
         }
         process().then((res) => {
-            setDoneItems(res);
+            setDoneItems(res.sort((a,b) => new Date(b.createdOn)-new Date(a.createdOn)));
         });
     }, [isLoaded,removingDone])
 
@@ -27,7 +28,15 @@ export default function DoneList() {
     } else {
         const doneListItems = doneItems.map((doneItem) => (
             <li key={doneItem._id}>
-                {doneItem.text}
+                <s>{doneItem.text}</s>{` ${new Date(doneItem.createdOn)}`}
+                <Link href={`/todo/${doneItem._id}`}>
+                    <button
+                        // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                        className="btn btn-success ml-5"
+                    >
+                        Open
+                    </button>
+                </Link>
                 <button
                     onClick={async () => {
                         const token = await getToken({ template: "codehooks" });
@@ -37,6 +46,19 @@ export default function DoneList() {
                     className="btn btn-info ml-5"
                 >
                     Mark as Uncomplete
+                </button>
+                <button
+                    onClick={async () => {
+                        const token = await getToken({ template: "codehooks" });
+                        await deleteTodo(token,userId,doneItem._id).then(() => {
+                            setRemovingDone(true);
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    }}
+                    className="btn btn-danger ml-5"
+                >
+                    Delete
                 </button>
             </li>
         ));
