@@ -32,7 +32,9 @@ const userAuth = async (req, res, next) => {
     } // might need an else here if auth not given
     next();
   } catch (error) {
-    next(error);
+    console.log(error);
+    res.status(403);
+    res.json(error).end();
   } 
 }
 app.use(userAuth)

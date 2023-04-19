@@ -11,29 +11,9 @@ export default function TodoFull({ id }) {
     const [todoCategory, setTodoCategory] = useState("");
     const [editingCategory, setEditingCategory] = useState(false);
     const [categories, setCategories] = useState([]);
-    const [submitCategory, setSubmitCategory] = useState(false);
     const [newCategory, setNewCategory] = useState("");
     
     const router = useRouter();
-    
-    // useEffect for setting the category list
-    // useEffect(() => {
-    //     async function processCategories() {
-    //         if(userId) {
-    //             const token = await getToken({ template: "codehooks" })
-    //             const res = await getCategories(token,userId);
-    //             return res;
-    //         }
-    //     }
-    //     processCategories().then((res) => {
-    //         setCategories(res);
-    //         // console.log(res);
-    //         // console.log("I am here 3: ");
-    //         // console.log(categories);
-    //     }).catch(() => {
-    //         setCategories([]); // need this type of error check everywhere
-    //     })
-    // }, [isLoaded])
 
     // for editing todo text
     useEffect(() => {
@@ -61,9 +41,6 @@ export default function TodoFull({ id }) {
                 return res;
             }
         }
-        // }).catch(() => {
-        //     setCategories([]); // need this type of error check everywhere
-        // })
         processCategories().then((res) => {
             setCategories(res);
             // console.log(todoText);
@@ -84,12 +61,10 @@ export default function TodoFull({ id }) {
         process().then((res) => {
             setTodoCategory(res.category);
             // console.log(todoText);
-            setEditingCategory(false);
-            setSubmitCategory(false);
         }).catch(() => {
             router.push("/404"); // check to make sure that the user doesn't access a non-existent todo id or one that they don't have access to
         });
-    }, [submitCategory])
+    }, [!editingCategory])
 
 
     async function editText() {
@@ -108,9 +83,9 @@ export default function TodoFull({ id }) {
         if(categoryName && categoryName.length > 0 && userId) {
             const token = await getToken({ template: "codehooks" })
             await editTodoCategory(token,userId,id,categoryName);
-            console.log(`outside ${newCategory} ${addingNewCategory}`);
+            // console.log(`outside ${newCategory} ${addingNewCategory}`);
             if(newCategory && newCategory.length > 0 && addingNewCategory) {
-                console.log("Inside");
+                // console.log("Inside");
                 const categoryItem = {
                     userId: userId,
                     name: newCategory
@@ -118,19 +93,15 @@ export default function TodoFull({ id }) {
                 await addCategory(token,categoryItem);
                 setNewCategory("");
                 setCategories(await getCategories(token,userId));
-            }
+            } // need an else statement here
             // const res = (await getTodo(token,userId,id))[0];
             // console.log("res" + JSON.stringify(res));
             // setTodoText(res.text);
             // setEditingTodo(false);
-            setSubmitCategory(true);
+            setEditingCategory(false);
             // console.log(token);
         }
     }    
-
-    function toggleEditText() {
-        setEditingTodo(true);
-    }
 
     function toggleEditCategory() {
         setEditingCategory(true);
@@ -149,78 +120,68 @@ export default function TodoFull({ id }) {
 
         if(categories && categories.length > 0) {
             categoryItems = categories.map((category) => (
-                    <button className="badge rounded-pill bg-dark text-light" onClick={() => {editCategory(category.name)}}>{category.name}</button>
+                    <button className="badge rounded-pill bg-dark text-light m-1" onClick={() => {editCategory(category.name)}}>{category.name}</button>
             ));
         }
 
 
         if(editingTodo && editingCategory) {
-            cardFill = (
-                <div>
-                    <span>Enter New Text: </span>
-                    <input
-                        value={todoText}
-                        placeholder="Please fill in the desired to-do description"
-                        onChange={(e) => setTodoText(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
-                        className="border border-dark form-control"
-                    ></input>
-                    <button className="btn btn-primary" onClick={editText}>Submit Edit</button>
-                    <span>Choose a New Category: </span>
-                    {categoryItems}
-                    <span>Or Enter a New Category: </span>
-                    <input
-                        value={newCategory}
-                        placeholder="Please fill in the desired category name"
-                        onChange={(e) => setNewCategory(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') { addingNewCategoryHelper() } }}
-                        className="border border-dark form-control"
-                    ></input>
-                    <button className="btn btn-primary" onClick={addingNewCategoryHelper}>Submit</button>
-                </div>
-            );
+            setEditingTodo(false);
+            setEditingCategory(false);
         } else if(editingTodo) {
             cardFill = (
-                <div>
+                <div className="d-inline-flex flex-column">
                     <span>Enter New Text: </span>
-                    <input
+                    <textarea
                         value={todoText}
                         placeholder="Please fill in the desired to-do description"
                         onChange={(e) => setTodoText(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
-                        className="border border-dark form-control"
-                    ></input>
-                    <span className="badge rounded-pill bg-light text-dark">{todoCategory}</span>
-                    <button className="btn btn-primary" onClick={editText}>Submit</button>
+                        className="border border-dark form-control p-2"
+                    ></textarea>
+                    <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    <div className="btn-group" role="group">
+                        <button className="btn btn-success m-1 rounded" onClick={editText}>Submit</button>
+                        <button className="btn btn-danger m-1 rounded" onClick={() => setEditingTodo(false)}>Cancel</button>
+                    </div>
                 </div>
             );
         } else if(editingCategory) {
             cardFill = (
-                <div>
+                <div className="d-inline-flex flex-column">
                     <h5 className="card-title">{todoText}</h5>
-                    <button className="btn btn-primary" onClick={toggleEditText}>Edit Text</button>
                     <span>Choose a Category: </span>
                     {categoryItems}
                     <span>Or Enter a New Category: </span>
-                    <input
+                    <textarea
                         value={newCategory}
                         placeholder="Please fill in the desired category name"
                         onChange={(e) => setNewCategory(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') { addingNewCategoryHelper() } }}
                         className="border border-dark form-control"
-                    ></input>
-                    <button className="btn btn-primary" onClick={addingNewCategoryHelper}>Submit</button>
+                    ></textarea>
+                    <div className="btn-group" role="group">
+                        <button className="btn btn-success m-1 rounded" onClick={addingNewCategoryHelper}>Submit</button>
+                        <button className="btn btn-danger m-1 rounded" onClick={() => setEditingCategory(false)}>Cancel</button>
+                    </div>
                 </div>
                 
             );
         } else {
             console.log(todoCategory);
             cardFill = (
-                <div>
-                    <h5 className="card-title">{todoText}</h5>
-                    <span className="badge rounded-pill bg-dark text-light">{todoCategory}</span>
-                    <button className="btn btn-primary" onClick={toggleEditText}>Edit Text</button>
-                    <button className="btn btn-primary" onClick={toggleEditCategory}>Edit Category</button>
+                <div className="d-inline-flex flex-column">
+                    <h5 className="card-title m-2">Full Todo Description</h5>
+                    <textarea
+                        value={todoText}
+                        className="p-2"
+                        disabled
+                    ></textarea>
+                    <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    <div className="btn-group" role="group">
+                        <button className="btn btn-warning m-1 rounded" onClick={() => setEditingTodo(true)}>Edit Text</button>
+                        <button className="btn btn-warning m-1 rounded" onClick={toggleEditCategory}>Edit Category</button>
+                    </div>
                 </div>
             )
         }
