@@ -18,7 +18,7 @@ export default function Todos({ Component, pageProps }) {
                     <title>To-Do</title>
                     <meta name="description" content="To-Do List" />
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
-                    <link rel="icon" href="/check_mark.ico" />
+                    <link rel="icon" href="/pop_icon.png" />
                 </Head>
                 <Navbar />
                 <main className="flex min-h-screen flex-col items-center justify-between p-24">

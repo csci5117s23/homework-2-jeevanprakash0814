@@ -18,7 +18,7 @@ export default function TodoPage() {
                 <title>To-Do Item: {id}</title>
                 <meta name="description" content="Full To-Do Item" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/check_mark.ico" />
+                <link rel="icon" href="/pop_icon.png" />
             </Head>
             <Navbar />
             <TodoFull id={id}></TodoFull>

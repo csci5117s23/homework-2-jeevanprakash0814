@@ -35,7 +35,17 @@ export default function DoneList() {
         const doneListItems = doneItems.map((doneItem) => (
             <div className="card relative place-items-center p-3 m-3 shadow-lg">
                 <h5 className="card-title"><s>{shrinkText(doneItem.text)}</s>{` ${new Date(doneItem.createdOn)}`}</h5>{/* Need to handle what happens if a huge piece of text is inputted */}
-                <div className="card-body">
+
+                <div className="card-body place-items-center">
+                    {doneItem.category === "" ? <></> : 
+                        <div className="card-body place-items-center">
+                            Category:
+                            <Link href={`done/${doneItem.category}`}>
+                                <span className="badge rounded-pill bg-dark text-light">{doneItem.category}</span>
+                            </Link>
+                            <br></br>
+                        </div>
+                    }
                     <Link href={`/todo/${doneItem._id}`}>
                         <button
                             // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}

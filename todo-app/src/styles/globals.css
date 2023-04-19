@@ -24,3 +24,24 @@ html,body {
   background-position: center;
   background-size: cover;
 }
+
+.card {
+  /* border-radius: 1em !important; */
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  padding: 1.5em .5em .5em;
+}
+
+.card-title {
+  font-weight: 700;
+}
+
+.card-img-top {
+  width: 10em!important;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.img-navbar {
+  width: 4em;
+  height: 4em;
+}

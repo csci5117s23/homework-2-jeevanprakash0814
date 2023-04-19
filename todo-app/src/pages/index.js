@@ -21,15 +21,18 @@ export default function Home() {
       </SignedIn>
       <SignedOut>
         <Head>
-          <title>Home</title>
+          <title>Pop Todo!</title>
           <meta name="description" content="To-do List Home Page" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/check_mark.ico" />
         </Head>
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
-          <div className="relative flex place-items-center">
-            <span>Jeevan's To-do List App</span>
-            <SignIn redirectUrl='/todos'></SignIn>
+          <div className="card align-center relative flex place-items-center">
+            <img src="/pop.jpeg" className="card-img-top rounded" alt="pop"></img>
+            <div className="card-body">
+              {/* <h4 className="card-title">Pop Todo!</h4> */}
+              <SignIn redirectUrl='/todos'></SignIn>
+            </div>
           </div>
         </main>
       </SignedOut>

@@ -21,7 +21,10 @@ export default function Navbar({ Component, pageProps }) {
                     >
                         <i className="fas fa-bars"></i>
                     </button>
-                    <div className="navbar-collapse justify-content-center">
+                    <div className="navbar-collapse justify-content-left .img-navbar">
+                        <img src="/pop_icon.png" className="img-navbar"></img>
+                    </div>
+                    <div className="navbar-collapse justify-content-left">
                         <Link className="navbar-brand text-white m-2" href="/">To-Do</Link>
                     </div>
                     <div className="navbar-collapse justify-content-right">
