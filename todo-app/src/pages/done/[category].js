@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Head from 'next/head'
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { shrinkText } from "@/modules/utils";
 
 export default function DoneCategoryPage() {
     const [doneItems, setDoneItems] = useState([]);
@@ -28,31 +29,64 @@ export default function DoneCategoryPage() {
         });
     }, [isLoaded,removingDone])
 
-    function shrinkText(text) {
-        // if(text.length > innerWidth/20) return `${text.substring(0,innerWidth/20)}...`;
-        // else return text;
-        if(text.length > 20) return `${text.substring(0,20)}...`;
-        else return text;
-    }
-
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
     else if (!doneItems) router.push("/404");
     else {
+        // const doneListItems = doneItems.map((doneItem) => (
+        //     <li key={doneItem._id}>
+        //         {shrinkText(doneItem.text)}
+        //         <button
+        //             onClick={async () => {
+        //                 const token = await getToken({ template: "codehooks" });
+        //                 await setToUndone(token,userId,doneItem._id);
+        //                 setRemovingDone(true);
+        //             }}
+        //             className="btn btn-info ml-5"
+        //         >
+        //             Mark as Uncomplete
+        //         </button>
+        //     </li>
+        // ));
+
         const doneListItems = doneItems.map((doneItem) => (
-            <li key={doneItem._id}>
-                {shrinkText(doneItem.text)}
-                <button
-                    onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        await setToUndone(token,userId,doneItem._id);
-                        setRemovingDone(true);
-                    }}
-                    className="btn btn-info ml-5"
-                >
-                    Mark as Uncomplete
-                </button>
-            </li>
+            <div className="card relative place-items-center p-3 m-3 shadow-lg">
+                <h5 className="card-title"><s>{shrinkText(doneItem.text)}</s>{` ${new Date(doneItem.createdOn)}`}</h5>{/* Need to handle what happens if a huge piece of text is inputted */}
+
+                <div className="card-body place-items-center">
+                    <Link href={`/todo/${doneItem._id}`}>
+                        <button
+                            // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                            className="btn btn-success ml-5"
+                        >
+                            Open
+                        </button>
+                    </Link>
+                    <button
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await setToUndone(token,userId,doneItem._id);
+                            setRemovingDone(true);
+                        }}
+                        className="btn btn-info ml-5"
+                    >
+                        Mark as Uncomplete
+                    </button>
+                    <button
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await deleteTodo(token,userId,doneItem._id).then(() => {
+                                setRemovingDone(true);
+                            }).catch((error) => {
+                                console.log(error);
+                            });
+                        }}
+                        className="btn btn-danger ml-5"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
         ));
 
         return (

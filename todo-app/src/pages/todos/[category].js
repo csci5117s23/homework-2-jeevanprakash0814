@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Head from 'next/head'
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import { shrinkText } from "@/modules/utils";
 
 export default function TodoList() {
     const [todoItems, setTodoItems] = useState([]);
@@ -46,32 +47,66 @@ export default function TodoList() {
         }
     }
 
-    function shrinkText(text) {
-        // if(text.length > innerWidth/20) return `${text.substring(0,innerWidth/20)}...`;
-        // else return text;
-        if(text.length > 20) return `${text.substring(0,20)}...`;
-        else return text;
-    }
-
 
     if (!isLoaded) return <><span> loading ... </span></>;
     else if (isLoaded && !isSignedIn) router.push("/");
     else if (!todoItems) router.push("/404");
     else {
+        // const todoListItems = todoItems.map((todoItem) => (
+        //     <li key={todoItem._id}>
+        //         {shrinkText(todoItem.text)}
+        //         <button
+        //             onClick={async () => {
+        //                 const token = await getToken({ template: "codehooks" });
+        //                 await setToDone(token,userId,todoItem._id);
+        //                 setAddingTodo(true);
+        //             }}
+        //             className="btn btn-info ml-5"
+        //         >
+        //             Mark as Done
+        //         </button>
+        //     </li>
+        // ));
+
         const todoListItems = todoItems.map((todoItem) => (
-            <li key={todoItem._id}>
-                {shrinkText(todoItem.text)}
-                <button
-                    onClick={async () => {
-                        const token = await getToken({ template: "codehooks" });
-                        await setToDone(token,userId,todoItem._id);
-                        setAddingTodo(true);
-                    }}
-                    className="btn btn-info ml-5"
-                >
-                    Mark as Done
-                </button>
-            </li>
+            <div className="card relative place-items-center p-3 m-3 shadow-lg">
+                <h5 className="card-title">{shrinkText(todoItem.text)}{` ${new Date(todoItem.createdOn)}`}</h5>
+                <div className="card-body">
+                    <Link href={`/todo/${todoItem._id}`}>
+                        <button
+                            // onClick={() => {let str = `/todo/${todoItem._id}`;router.push(str)}}
+                            className="btn btn-success ml-5"
+                        >
+                            Open
+                        </button>
+                    </Link>
+                    <button
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await setToDone(token,userId,todoItem._id);
+                            setAddingTodo(true);
+                        }}
+                        className="btn btn-info ml-5"
+                    >
+                        Mark as Done
+                    </button>
+                    <button
+                        onClick={async () => {
+                            const token = await getToken({ template: "codehooks" });
+                            await deleteTodo(token,userId,todoItem._id).then(() => {
+                                setAddingTodo(true);
+                            }).catch((error) => {
+                                console.log(error);
+                            });
+                        }}
+                        className="btn btn-danger ml-5"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+            // <li key={todoItem._id}>
+            // </li>
         ));
 
         return (

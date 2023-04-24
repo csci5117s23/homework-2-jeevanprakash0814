@@ -3,6 +3,7 @@ import { useAuth } from '@clerk/nextjs';
 import { addCategory, addTodo, deleteCategory, deleteTodo, editTodoCategory, getCategories, getCategoryAllList, getCategoryTodoList, getTodoList, setToDone } from "@/modules/data";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { shrinkText } from "@/modules/utils";
 
 export default function TodoList() {
     const [todoItems, setTodoItems] = useState([]);
@@ -102,13 +103,6 @@ export default function TodoList() {
         })
     }
 
-    function shrinkText(text) {
-        // if(text.length > screen.width/20) return `${text.substring(0,screen.width/20)}...`;
-        // else return text;
-        if(text.length > 20) return `${text.substring(0,20)}...`;
-        else return text;
-    }
-
 
     if(!isLoaded) {
         return <span> loading ... </span> // add nice loading animation here
@@ -116,6 +110,15 @@ export default function TodoList() {
         const todoListItems = todoItems.map((todoItem) => (
             <div className="card relative place-items-center p-3 m-3 shadow-lg">
                 <h5 className="card-title">{shrinkText(todoItem.text)}{` ${new Date(todoItem.createdOn)}`}</h5>
+                    {todoItem.category === "" ? <></> :
+                        <div className="card-body place-items-center">
+                            Category:
+                            <Link href={`todos/${todoItem.category}`}>
+                                <span className="badge rounded-pill bg-dark text-light">{todoItem.category}</span>
+                            </Link>
+                            <br></br>
+                        </div>
+                    }
                 <div className="card-body">
                     <Link href={`/todo/${todoItem._id}`}>
                         <button

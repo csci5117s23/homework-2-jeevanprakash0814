@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from '@clerk/nextjs';
 import { deleteTodo, getDoneList, setToUndone } from "@/modules/data";
 import Link from "next/link";
+import { shrinkText } from "@/modules/utils";
 
 export default function DoneList() {
     const [doneItems, setDoneItems] = useState([]);
@@ -21,13 +22,6 @@ export default function DoneList() {
             setDoneItems(res.sort((a,b) => new Date(b.createdOn)-new Date(a.createdOn)));
         });
     }, [isLoaded,removingDone])
-
-    function shrinkText(text) {
-        // if(text.length > innerWidth/20) return `${text.substring(0,innerWidth/20)}...`;
-        // else return text;
-        if(text.length > 20) return `${text.substring(0,20)}...`;
-        else return text;
-    }
 
     if(!isLoaded) {
         return <span> loading ... </span> // add nice loading animation here

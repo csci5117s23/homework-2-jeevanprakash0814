@@ -12,6 +12,7 @@ export default function TodoFull({ id }) {
     const [editingCategory, setEditingCategory] = useState(false);
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState("");
+    const [completed, setCompleted] = useState(false);
     
     const router = useRouter();
 
@@ -26,6 +27,7 @@ export default function TodoFull({ id }) {
         }
         process().then((res) => {
             setTodoText(res.text);
+            setCompleted(res.completed);
             // console.log(todoText);
         }).catch(() => {
             router.push("/404"); // check to make sure that the user doesn't access a non-existent todo id or one that they don't have access to
@@ -139,7 +141,14 @@ export default function TodoFull({ id }) {
                         onKeyDown={(e) => { if (e.key === 'Enter') { editText } }}
                         className="border border-dark form-control p-2"
                     ></textarea>
-                    <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    {!completed ?
+                    <Link href={`/todos/${todoCategory}`}>
+                        <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    </Link>
+                    :
+                    <Link href={`/done/${todoCategory}`}>
+                        <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    </Link>}
                     <div className="btn-group" role="group">
                         <button className="btn btn-success m-1 rounded" onClick={editText}>Submit</button>
                         <button className="btn btn-danger m-1 rounded" onClick={() => setEditingTodo(false)}>Cancel</button>
@@ -177,7 +186,14 @@ export default function TodoFull({ id }) {
                         className="p-2"
                         disabled
                     ></textarea>
-                    <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    {!completed ?
+                    <Link href={`/todos/${todoCategory}`}>
+                        <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    </Link>
+                    :
+                    <Link href={`/done/${todoCategory}`}>
+                        <span className="badge rounded-pill bg-dark text-light m-2">{todoCategory}</span>
+                    </Link>}
                     <div className="btn-group" role="group">
                         <button className="btn btn-warning m-1 rounded" onClick={() => setEditingTodo(true)}>Edit Text</button>
                         <button className="btn btn-warning m-1 rounded" onClick={toggleEditCategory}>Edit Category</button>
